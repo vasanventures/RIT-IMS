@@ -2,11 +2,12 @@ import { type FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/useAuth.ts';
 import api from '../services/api.ts';
-import { LogIn, Mail, Lock, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 
 const Login: FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   
@@ -41,17 +42,42 @@ const Login: FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden">
-        <div className="px-8 pt-8 pb-6 bg-gradient-to-br from-indigo-600 to-blue-500 text-white text-center">
-          <div className="mx-auto w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-4 backdrop-blur-sm">
-            <LogIn className="w-8 h-8 text-white" />
+    <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
+      <div className="flex flex-col md:flex-row max-w-4xl w-full bg-white rounded-[20px] shadow-2xl overflow-hidden min-h-[500px]">
+        {/* Left Pane - Branding & Info */}
+        <div className="md:w-[45%] bg-[#254170] p-10 flex flex-col items-center text-center justify-center text-white relative">
+          {/* Logo Placeholder - RIT Style */}
+          <div className="mb-8 flex items-center gap-4">
+            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md">
+                <svg viewBox="0 0 100 100" className="w-10 h-10 fill-white">
+                    <path d="M50 10 L80 90 L20 90 Z" opacity="0.5" />
+                    <text x="50" y="65" textAnchor="middle" fontSize="30" fontWeight="bold" fill="white">rit</text>
+                </svg>
+            </div>
+            <div className="text-left">
+                <h1 className="text-3xl font-bold leading-tight tracking-tight">RIT</h1>
+                <p className="text-xs uppercase tracking-[0.2em] font-medium opacity-80">Rajalakshmi Institute of Technology</p>
+            </div>
           </div>
-          <h2 className="text-3xl font-bold mb-2">Welcome Back</h2>
-          <p className="text-indigo-100">Institute Management System</p>
+          
+          <div className="max-w-xs space-y-4">
+            <p className="text-sm leading-relaxed font-light opacity-90 italic">
+              "Rajalakshmi Institute of Technology is an engineering college in Chennai, Tamil Nadu, India. RIT is approved by AICTE and affiliated with Anna University, Chennai and accredited with 'A++' Grade in NAAC. ."
+            </p>
+          </div>
+          
+          {/* Decorative Wave (approximation) */}
+          <div className="absolute right-0 top-0 bottom-0 w-8 bg-white/5 pointer-events-none hidden md:block" 
+               style={{ clipPath: 'polygon(100% 0, 100% 100%, 0 100%, 40% 50%, 0 0)' }}>
+          </div>
         </div>
-        
-        <div className="p-8 pb-10">
+
+        {/* Right Pane - Login Form */}
+        <div className="md:w-[55%] p-10 md:p-16 flex flex-col justify-center">
+          <div className="mb-8">
+            <h2 className="text-3xl font-semibold text-gray-700">Login</h2>
+          </div>
+
           <form onSubmit={handleLogin} className="space-y-6">
             {error && (
               <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm font-medium text-center border border-red-100">
@@ -59,51 +85,51 @@ const Login: FC = () => {
               </div>
             )}
             
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Email Address</label>
+            <div className="space-y-2">
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-slate-400" />
-                </div>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
-                  placeholder="name@institute.edu"
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none placeholder:text-gray-400 text-gray-600"
+                  placeholder="User ID"
                   required
                 />
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">Password</label>
+            <div className="space-y-2">
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-slate-400" />
-                </div>
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
-                  placeholder="••••••••"
+                  className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none placeholder:text-gray-400 text-gray-600 pr-12"
+                  placeholder="Password"
                   required
                 />
-              </div>
-              <div className="flex justify-end mt-2">
-                <a href="#" className="text-sm text-indigo-600 hover:text-indigo-800 font-medium">Forgot password?</a>
+                <button 
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
               </div>
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-medium shadow-md shadow-indigo-200 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-70 flex justify-center items-center"
+              className="w-full py-3 px-4 bg-[#007bff] hover:bg-blue-600 text-white rounded-lg font-medium shadow-lg shadow-blue-500/20 transition-all transform active:scale-[0.98] flex justify-center items-center"
             >
-              {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Log In'}
+              {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Login'}
             </button>
           </form>
+          
+          <div className="mt-8 text-center text-sm text-gray-500">
+            Forgot password? <a href="#" className="text-blue-600 hover:underline font-medium">Reset here</a>
+          </div>
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import { type FC } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/useAuth.ts';
-import { LogOut, LayoutDashboard, Users, BookOpen, Calendar, Bell } from 'lucide-react';
+import { LogOut, LayoutDashboard, Users, BookOpen, Calendar, Bell, ClipboardCheck, FileText, Award, FileCheck, FlaskConical, PenTool, BookOpenCheck, CreditCard, ReceiptText, MessageSquare, ShieldCheck, Mail, Key, AppWindow } from 'lucide-react';
 import Chatbot from './Chatbot.tsx';
 
 interface DashboardLayoutProps {
@@ -10,16 +11,30 @@ interface DashboardLayoutProps {
 
 const DashboardLayout: FC<DashboardLayoutProps> = ({ children, title }) => {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   const getMenuItems = () => {
-    const base = [{ icon: LayoutDashboard, label: 'Dashboard', path: '/' }];
-    if (user?.role === 'ADMIN') {
-      return [...base, { icon: Users, label: 'Manage Users' }, { icon: BookOpen, label: 'Subjects' }];
-    }
-    if (user?.role === 'FACULTY') {
-      return [...base, { icon: Calendar, label: 'Timetable' }, { icon: BookOpen, label: 'Attendance & Marks' }];
-    }
-    return [...base, { icon: Calendar, label: 'Timetable' }, { icon: Bell, label: 'Notifications' }];
+    const base = [
+      { icon: LayoutDashboard, label: 'Dashboard', path: '/student' },
+      { icon: Calendar, label: 'My Time Table', path: '/timetable' },
+      { icon: AppWindow, label: 'My Subject Registration', path: '/registration' },
+      { icon: FileText, label: 'Apply Leave / OD', path: '/leave' },
+      { icon: ClipboardCheck, label: 'Attendance', path: '/attendance' },
+      { icon: Award, label: 'Apply Certificates', path: '/certificates' },
+      { icon: FileCheck, label: 'CAT Mark', path: '/marks/cat' },
+      { icon: FlaskConical, label: 'LAB Mark', path: '/marks/lab' },
+      { icon: PenTool, label: 'Assignment Mark', path: '/marks/assignment' },
+      { icon: BookOpenCheck, label: 'Grade Book', path: '/gradebook' },
+      { icon: CreditCard, label: 'Academic Fee', path: '/fee/academic' },
+      { icon: ReceiptText, label: 'Exam Fee', path: '/fee/exam' },
+      { icon: MessageSquare, label: 'Feedbacks', path: '/feedbacks' },
+      { icon: Users, label: 'Class Committee', path: '/committee' },
+      { icon: ShieldCheck, label: 'No Due Request', path: '/nodue' },
+      { icon: Mail, label: 'Messages', path: '/messages' },
+      { icon: Key, label: 'Change password', path: '/settings/password' },
+    ];
+    
+    return base;
   };
 
   return (
@@ -31,10 +46,14 @@ const DashboardLayout: FC<DashboardLayoutProps> = ({ children, title }) => {
           <p className="text-xs text-slate-400 mt-1 uppercase tracking-wider">{user?.role} Portal</p>
         </div>
         
-        <div className="flex-1 py-6 px-4 space-y-2 overflow-y-auto">
+        <div className="flex-1 py-4 px-3 space-y-1 overflow-y-auto custom-scrollbar">
           {getMenuItems().map((item, idx) => (
-            <button key={idx} className="flex flex-row items-center w-full px-4 py-3 text-sm font-medium rounded-xl transition-all text-slate-300 hover:text-white hover:bg-slate-800 group">
-              <item.icon className="w-5 h-5 mr-3 text-slate-400 group-hover:text-indigo-400 transition-colors" />
+            <button 
+              key={idx} 
+              onClick={() => navigate(item.path)}
+              className="flex flex-row items-center w-full px-4 py-2 text-xs font-medium rounded-lg transition-all text-slate-400 hover:text-white hover:bg-slate-800/50 group"
+            >
+              <item.icon className="w-4 h-4 mr-3 text-slate-500 group-hover:text-blue-400 transition-colors" />
               {item.label}
             </button>
           ))}

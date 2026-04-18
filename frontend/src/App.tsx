@@ -7,6 +7,12 @@ import Login from './pages/Login.tsx';
 import AdminDashboard from './pages/AdminDashboard.tsx';
 import FacultyDashboard from './pages/FacultyDashboard.tsx';
 import StudentDashboard from './pages/StudentDashboard.tsx';
+import CATMarks from './pages/CATMarks.tsx';
+import LABMarks from './pages/LABMarks.tsx';
+import AssignmentMarks from './pages/AssignmentMarks.tsx';
+import AttendancePage from './pages/Attendance.tsx';
+import TimetablePage from './pages/Timetable.tsx';
+import FeesPage from './pages/Fees.tsx';
 
 function App() {
   return (
@@ -26,7 +32,14 @@ function App() {
           </Route>
 
           <Route element={<ProtectedRoute allowedRoles={['STUDENT']} />}>
-            <Route path="/student/*" element={<StudentDashboard />} />
+            <Route path="/student" element={<StudentDashboard />} />
+            <Route path="/timetable" element={<TimetablePage />} />
+            <Route path="/attendance" element={<AttendancePage />} />
+            <Route path="/marks/cat" element={<CATMarks />} />
+            <Route path="/marks/lab" element={<LABMarks />} />
+            <Route path="/marks/assignment" element={<AssignmentMarks />} />
+            <Route path="/fee/academic" element={<FeesPage />} />
+            <Route path="/fee/exam" element={<FeesPage />} />
           </Route>
 
         </Routes>
